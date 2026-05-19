@@ -1,19 +1,12 @@
 # FinSight RAG — Agentic Financial Research Assistant
 
-[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
-[![LangChain](https://img.shields.io/badge/LangChain-0.3-green.svg)](https://langchain.com)
-[![LangGraph](https://img.shields.io/badge/LangGraph-0.2-orange.svg)](https://langchain-ai.github.io/langgraph/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![RAGAs Evaluated](https://img.shields.io/badge/Evaluated-RAGAs-purple.svg)](https://docs.ragas.io)
-[![Groq](https://img.shields.io/badge/LLM-Groq%20Llama3-orange.svg)](https://console.groq.com)
-
-> **Production-grade Agentic RAG system** for financial document analysis — SEC 10-K filings, earnings call transcripts, and financial news. Built with LangGraph, ChromaDB, hybrid search (BM25 + dense retrieval), cross-encoder reranking, and a full evaluation pipeline using RAGAs. Runs 100% free using Groq + local HuggingFace embeddings.
+**Agentic RAG system** for financial document analysis — SEC 10-K filings, earnings call transcripts, and financial news. Built with LangGraph, ChromaDB, hybrid search (BM25 + dense retrieval), cross-encoder reranking, and a full evaluation pipeline using RAGAs.
 
 ---
 
 ## What This Project Demonstrates
 
-This project showcases a **complete, production-ready RAG pipeline** that goes far beyond toy examples:
+This project showcases a **complete, production-ready RAG pipeline**:
 
 | Skill Area | Implementation |
 |---|---|
@@ -22,7 +15,7 @@ This project showcases a **complete, production-ready RAG pipeline** that goes f
 | **Advanced Chunking** | Semantic chunking with `sentence-transformers`, not naive fixed-size splitting |
 | **Cross-encoder Reranking** | `cross-encoder/ms-marco-MiniLM-L-6-v2` for precision after retrieval |
 | **Evaluation Pipeline** | RAGAs metrics: faithfulness, answer relevancy, context precision/recall |
-| **Baseline Comparison** | Naive RAG vs Agentic RAG side-by-side — not just numbers, but proof of improvement |
+| **Baseline Comparison** | Naive RAG vs Agentic RAG side-by-side |
 | **Vector Store** | ChromaDB with `BAAI/bge-large-en-v1.5` embeddings |
 | **CI/CD + Eval Gate** | GitHub Actions: lint → test → RAGAs quality gate → Docker build |
 | **API + UI** | FastAPI with streaming SSE endpoints + interactive Streamlit UI |
@@ -70,13 +63,11 @@ This project showcases a **complete, production-ready RAG pipeline** that goes f
 
 ### Prerequisites
 - Python 3.11+
-- Free [Groq API key](https://console.groq.com) — no credit card needed
+- Free [Groq API key](https://console.groq.com)
 
 ### Installation
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/financial-rag-assistant
-cd financial-rag-assistant
 python -m venv .venv && source .venv/bin/activate
 pip install -e ".[dev]"
 cp .env.example .env
@@ -86,10 +77,10 @@ cp .env.example .env
 ### Ingest Documents
 
 ```bash
-# Quick start — built-in sample data (AAPL, MSFT, NVDA), no download needed
+# Quick start — built-in sample data (AAPL, MSFT, NVDA)
 python scripts/ingest_pipeline.py --use-sample-data
 
-# Full pipeline — real SEC EDGAR 10-K filings (free, public data)
+# Full pipeline — real SEC EDGAR 10-K filings
 python scripts/ingest_pipeline.py --tickers AAPL MSFT NVDA GOOGL --years 2022 2023 2024 --email your@email.com
 ```
 
@@ -120,7 +111,7 @@ Runs the agentic pipeline on financial Q&A pairs and scores with RAGAs.
 python scripts/run_evaluation.py --output results/eval_report.csv
 ```
 
-**Tier 2 — Baseline comparison (the important one):**
+**Tier 2 — Baseline comparison:**
 Runs both a naive pipeline (simple retrieve → answer) and the full agentic pipeline, then prints them side by side.
 
 ```bash
@@ -152,19 +143,15 @@ Evaluated on financial Q&A pairs (AAPL, MSFT, NVDA sample corpus) using RAGAs wi
 
 Full per-question breakdown: [results/eval_report.csv](results/eval_report.csv)
 
-> **Note:** Evaluation ran on the free Groq tier (100k tokens/day limit). Some samples timed out due to rate limiting, so scores are conservative. Full evaluation on [FinanceBench](https://huggingface.co/datasets/PatronusAI/financebench) (150 Q&A pairs) is available after ingesting real SEC filings.
-
 ---
 
-## Data Sources (All Free & Public)
+## Data Sources
 
 | Source | How to Access | Used For |
 |---|---|---|
 | **SEC EDGAR** | `sec-edgar-downloader` library | 10-K, 10-Q, 8-K annual/quarterly filings |
 | **FinanceBench** | [HuggingFace](https://huggingface.co/datasets/PatronusAI/financebench) | 150 Q&A evaluation benchmark pairs |
 | **HuggingFace Datasets** | `datasets` library | `gbharti/finance-alpaca` for testing |
-
-> No paid data subscriptions needed. SEC EDGAR is completely free and contains 10,000+ companies going back decades.
 
 ---
 
@@ -212,25 +199,6 @@ financial-rag-assistant/
 
 ---
 
-## Key Technical Decisions
-
-### Why Hybrid Search?
-Dense embeddings miss exact financial figures (e.g., "$394.3 billion"). BM25 catches exact keyword matches. **Reciprocal Rank Fusion** combines both without any hyperparameter tuning — the scores from sparse and dense are on different scales, so RRF is more robust than a weighted sum.
-
-### Why LangGraph over simple LangChain chains?
-LangGraph's explicit state machine lets the Critic node route back to retrieval when document grades are low. Simple chains can't loop. This is what makes it "agentic" — the system can decide it doesn't have enough information and try again.
-
-### Why Semantic Chunking?
-Financial documents have clear section boundaries (MD&A, Risk Factors, etc.) and tables that should never be split mid-row. Semantic chunking respects sentence boundaries and SEC section headers, preserving numerical context that fixed-size chunking would destroy.
-
-### Why a baseline comparison in evaluation?
-A single accuracy number means nothing without context. The `--compare` flag runs both naive RAG and agentic RAG on the same questions, making the value of the additional complexity measurable and defensible.
-
-### Why Groq + local embeddings?
-The entire project runs free — Groq provides 100k tokens/day on Llama models, and `BAAI/bge-large-en-v1.5` runs locally. No credit card needed to reproduce results.
-
----
-
 ## Tech Stack
 
 | Category | Tool |
@@ -256,9 +224,3 @@ The entire project runs free — Groq provides 100k tokens/day on Llama models, 
 - [ ] GraphRAG for company relationship networks
 - [ ] Real-time ingestion from SEC EDGAR RSS feed (new 8-K filings as they drop)
 - [ ] Multi-tenant ChromaDB with namespace isolation
-
----
-
-## License
-
-MIT License — free to use, modify, and distribute.
