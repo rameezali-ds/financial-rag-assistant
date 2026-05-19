@@ -17,11 +17,10 @@ env/
 # Environment
 .env
 
-# Data — don't commit SEC filings (can be large)
+# Data
 data/raw/
 data/chroma/
 
-# But DO commit processed eval results
 !data/eval_dataset.json
 !results/.gitkeep
 
