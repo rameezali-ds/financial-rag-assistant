@@ -100,7 +100,7 @@ uvicorn api.main:app --reload
 
 ## Evaluation
 
-This project includes a two-tier evaluation setup — not just a single score, but a **baseline comparison** that proves the agentic approach outperforms naive RAG.
+This project includes a two-tier evaluation setup, but a **baseline comparison** that proves the agentic approach outperforms naive RAG.
 
 ### How it works
 
@@ -214,13 +214,3 @@ financial-rag-assistant/
 | **UI** | Streamlit |
 | **Data** | sec-edgar-downloader (free SEC filings) |
 | **DevOps** | Docker, GitHub Actions |
-
----
-
-## Roadmap
-
-- [ ] Add multi-modal support (parse charts/tables from PDFs with `unstructured`)
-- [ ] Fine-tune embedding model on financial domain with `sentence-transformers`
-- [ ] GraphRAG for company relationship networks
-- [ ] Real-time ingestion from SEC EDGAR RSS feed (new 8-K filings as they drop)
-- [ ] Multi-tenant ChromaDB with namespace isolation
