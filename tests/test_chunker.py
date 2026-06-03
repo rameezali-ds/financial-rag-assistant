@@ -1,4 +1,4 @@
-"""Unit tests for FinSight RAG components."""
+"""Unit tests for FinSight RAG components"""
 import pytest
 from src.ingestion.chunker import semantic_chunk, Chunk
 from src.ingestion.document_parser import _clean_text
