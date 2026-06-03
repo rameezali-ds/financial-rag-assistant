@@ -1,5 +1,5 @@
 """
-FinSight RAG — Streamlit interactive UI.
+FinSight RAG: Streamlit interactive UI.
 
 Run with:
     streamlit run app/streamlit_app.py
