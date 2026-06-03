@@ -1,6 +1,5 @@
 """
-LangGraph node implementations for the FinSight RAG agent.
-
+LangGraph node implementations - FinSight RAG agent.
 """
 from __future__ import annotations
 
