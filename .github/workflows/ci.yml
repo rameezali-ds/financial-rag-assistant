@@ -7,9 +7,7 @@ on:
     branches: [main]
 
 jobs:
-  # -----------------------------------------------------------------------
   # Job 1: Lint + Type Check
-  # -----------------------------------------------------------------------
   lint:
     name: Lint & Type Check
     runs-on: ubuntu-latest
@@ -29,9 +27,7 @@ jobs:
       - name: Run MyPy type checker
         run: mypy src/ --ignore-missing-imports
 
-  # -----------------------------------------------------------------------
   # Job 2: Unit Tests
-  # -----------------------------------------------------------------------
   test:
     name: Unit Tests
     runs-on: ubuntu-latest
@@ -55,9 +51,7 @@ jobs:
         with:
           file: ./coverage.xml
 
-  # -----------------------------------------------------------------------
   # Job 3: RAGAs Evaluation Gate
-  # -----------------------------------------------------------------------
   eval-gate:
     name: Evaluation Quality Gate
     runs-on: ubuntu-latest
@@ -104,9 +98,7 @@ jobs:
           name: eval-results
           path: results/ci_eval.csv
 
-  # -----------------------------------------------------------------------
   # Job 4: Docker Build + Push
-  # -----------------------------------------------------------------------
   docker:
     name: Docker Build
     runs-on: ubuntu-latest
