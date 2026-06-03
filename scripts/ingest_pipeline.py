@@ -1,5 +1,5 @@
 """
-End-to-end ingestion pipeline: Download → Parse → Chunk → Embed → Store.
+End-to-end ingestion pipeline - Download → Parse → Chunk → Embed → Store.
 """
 from __future__ import annotations
 
